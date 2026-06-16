@@ -152,18 +152,27 @@ const Inventory = () => {
     try {
       e.preventDefault();
       if (!validateForm()) return;
-      console.log("submitting:", formData);
 
       setIsSubmitting(true);
       let result;
       if (editingInventory) {
         const ItemId = editingInventory._id;
-        console.log("Updating student with ID:", ItemId);
         result = await updateInventory(ItemId, formData);
-        if (result?.success) toast.success("Inventory updated successfully");
+        if (result?.success) {
+          setFilteredItems((prev) =>
+            prev.map((item) =>
+              item._id === result.data._id ? result.data : item,
+            ),
+          );
+          setIsDialogOpen(false);
+          setEditingInventory(null);
+          setFormData(initialState);
+          toast.success("Inventory updated successfully");
+        }
       } else {
         result = await addInventoryItem(formData);
         if (result?.success) {
+          setFilteredItems((prev) => [result.data, ...prev]);
           setIsDialogOpen(false);
           setEditingInventory(null);
           setFormData(initialState);

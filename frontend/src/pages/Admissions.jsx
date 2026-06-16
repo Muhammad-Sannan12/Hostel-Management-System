@@ -72,6 +72,7 @@ const Admissions = () => {
     // department: '',
     // year: '',
     occupation: "",
+    occupationOther: "",
     hostelName: "",
     roomNumber: "",
     contactNumber: "",
@@ -93,6 +94,9 @@ const Admissions = () => {
       newErrors.password = "Password is required for new students";
     }
     if (!formData.occupation) newErrors.occupation = "Occupation is required";
+    if (formData.occupation === "other" && !formData.occupationOther) {
+      newErrors.occupationOther = "Please specify your occupation";
+    }
     if (!formData.organizationName?.trim())
       newErrors.organizationName = "Organization/Institution name is required";
     if (!formData.fee) newErrors.fee = "Decided fee is required";
@@ -192,6 +196,7 @@ const Admissions = () => {
       email: student.user?.email || student.email || "",
       fee: student.fee || "",
       occupation: student.occupation || "",
+      occupationOther: student.occupationOther || "",
       organizationName: student.organizationName || "",
     });
 
@@ -628,8 +633,11 @@ const Admissions = () => {
                       <SelectValue placeholder="Select occupation" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="student">Student</SelectItem>
-                      <SelectItem value="employee">Employee</SelectItem>
+                      <SelectItem value="9">9th Student</SelectItem>
+                      <SelectItem value="10">10th Student</SelectItem>
+                      <SelectItem value="11">1st Year Student</SelectItem>
+                      <SelectItem value="12">2nd Year Student</SelectItem>
+                      <SelectItem value="mbbs">MBBS Student</SelectItem>
                       <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
@@ -642,6 +650,45 @@ const Admissions = () => {
                     </p>
                   )}
                 </div>
+                {formData.occupation === "other" && (
+                  <div>
+                    <Label
+                      htmlFor="occupationOther"
+                      style={{ fontSize: "13px", fontWeight: 500 }}
+                    >
+                      Please specify
+                    </Label>
+                    <Input
+                      id="occupationOther"
+                      value={formData.occupationOther || ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          occupationOther: e.target.value,
+                        })
+                      }
+                      placeholder="Enter your occupation"
+                      className={
+                        errors.occupationOther ? "border-destructive" : ""
+                      }
+                      style={{
+                        fontSize: "13px",
+                        fontWeight: 400,
+                        height: "36px",
+                        padding: "6px 10px",
+                        borderRadius: "4px",
+                      }}
+                    />
+                    {errors.occupationOther && (
+                      <p
+                        className="mt-1 error-text text-destructive"
+                        style={{ fontSize: "12px" }}
+                      >
+                        {errors.occupationOther}
+                      </p>
+                    )}
+                  </div>
+                )}
                 <div>
                   <Label
                     htmlFor="name"
@@ -1259,10 +1306,12 @@ const Admissions = () => {
           {viewingStudent && (
             <div className="mt-4 grid gap-6 md:grid-cols-3 lg:grid-cols-4">
               <div>
-                <Label className="text-muted-foreground">Full Name</Label>
-                <p className="mt-1 font-medium">
-                  {viewingStudent.user?.name || viewingStudent.name}
-                </p>
+                <Label className="text-muted-foreground">Student Name</Label>
+                <p className="mt-1 font-medium">{viewingStudent.name}</p>
+              </div>
+              <div>
+                <Label className="text-muted-foreground">Father's Name</Label>
+                <p className="mt-1 font-medium">{viewingStudent.fatherName}</p>
               </div>
               <div>
                 <Label className="text-muted-foreground">Boarding No</Label>
@@ -1270,10 +1319,7 @@ const Admissions = () => {
                   {viewingStudent.boardingNumber}
                 </p>
               </div>
-              <div>
-                <Label className="text-muted-foreground">Father's Name</Label>
-                <p className="mt-1 font-medium">{viewingStudent.fatherName}</p>
-              </div>
+
               {/* <div>
                 <Label className="text-muted-foreground">Program</Label>
                 <p className="mt-1 font-medium">{viewingStudent.department || viewingStudent.program}</p>
@@ -1285,7 +1331,7 @@ const Admissions = () => {
               <div>
                 <Label className="text-muted-foreground">Contact Number</Label>
                 <p className="mt-1 font-medium">
-                  {viewingStudent.contact || viewingStudent.contactNumber}
+                  {viewingStudent.contactNumber}
                 </p>
               </div>
               <div>
@@ -1310,6 +1356,20 @@ const Admissions = () => {
                 <Label className="text-muted-foreground">Email</Label>
                 <p className="mt-1 font-medium">
                   {viewingStudent.user?.email || "-"}
+                </p>
+              </div>
+              <div>
+                <Label className="text-muted-foreground">Occupation</Label>
+                <p className="mt-1 font-medium">
+                  {viewingStudent.occupation || "-"}
+                </p>
+              </div>
+              <div>
+                <Label className="text-muted-foreground">
+                  Occupation Other
+                </Label>
+                <p className="mt-1 font-medium">
+                  {viewingStudent.occupationOther || "-"}
                 </p>
               </div>
             </div>

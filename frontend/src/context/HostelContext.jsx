@@ -156,7 +156,7 @@ export const HostelProvider = ({ children }) => {
       const response = await API.post("/inventory", itemData);
       // console.log("Inventory item added:",response.data.data);
       setInventoryItems((prev) => [...prev, response.data.data]);
-      return { success: true };
+      return { success: true, data: response.data.data };
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add inventory");
       return { success: false, error: error.response?.data?.message };
@@ -169,7 +169,6 @@ export const HostelProvider = ({ children }) => {
       setInventoryItems((prev) =>
         prev.map((item) => (item._id === id ? response.data : item)),
       );
-      console.log(response);
       if (response?.data?.success) {
         return { success: true, data: response.data.data };
       } else {

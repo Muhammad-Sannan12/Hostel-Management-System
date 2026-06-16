@@ -104,7 +104,7 @@ const updateInventory = async (req, res) => {
   try {
     const inventoryitem = await Inventory.findById(req.params.id);
     if (!inventoryitem) {
-      console.log("❌ inventoryitem not found:", req.params.id);
+      console.log("inventoryitem not found:", req.params.id);
       res.status(404);
       throw new Error("inventoryitem not found");
     }
